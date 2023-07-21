@@ -1,4 +1,4 @@
-# DevOps Basics: Comprehensive Introduction and References
+# DevOps 101: Overview & Comprehensive Introduction and References
 
 ## Introduction
 
@@ -6,16 +6,19 @@ Welcome to the DevOps Basics repository! This README provides a comprehensive in
 
 ## Table of Contents
 
-1. [Introduction to DevOps](#introduction-to-devops)
-2. [Kubernetes: Container Orchestration Platform](#kubernetes-container-orchestration-platform)
-3. [Docker: Containerization Platform](#docker-containerization-platform)
-4. [Continuous Integration (CI)](#continuous-integration-ci)
-5. [Continuous Deployment (CD)](#continuous-deployment-cd)
-6. [Infrastructure as Code (IaC)](#infrastructure-as-code-iac)
-7. [Containerization](#containerization)
-8. [Monitoring and Logging](#monitoring-and-logging)
-9. [Collaboration and Communication](#collaboration-and-communication)
-10. [References](#references)
+- [DevOps 101: Overview \& Comprehensive Introduction and References](#devops-101-overview--comprehensive-introduction-and-references)
+  - [Introduction](#introduction)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction to DevOps](#introduction-to-devops)
+  - [Kubernetes: Container Orchestration Platform](#kubernetes-container-orchestration-platform)
+  - [Docker: Containerization Platform](#docker-containerization-platform)
+  - [Continuous Integration (CI)](#continuous-integration-ci)
+  - [Continuous Deployment (CD)](#continuous-deployment-cd)
+  - [Infrastructure as Code (IaC)](#infrastructure-as-code-iac)
+  - [Containerization](#containerization)
+  - [Monitoring and Logging](#monitoring-and-logging)
+  - [Collaboration and Communication](#collaboration-and-communication)
+  - [References](#references)
 
 ## Introduction to DevOps
 
@@ -71,5 +74,3 @@ Here are some additional references to explore and deepen your understanding of 
 - [CircleCI Documentation](https://circleci.com/docs/)
 
 ---
-
-Feel free to tailor this README to suit your specific audience and the content you are covering in your DevOps Basics repository. The goal is to provide a comprehensive and organized guide for learners to explore and understand the different aspects of DevOps. Happy teaching and learning!
