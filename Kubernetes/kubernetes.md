@@ -109,13 +109,10 @@ Kubernetes automatically adjusts the number of running replicas (Pods) based on 
 
 # Kubernetes Components and Architecture
 
-<div style="display: flex; justify-content: center; background:white ;border-radius:12px ; max-width: 80%; margin-left: 2rem;flex-wrap: wrap;" >
-  <img src="https://bit.ly/44XkgY7" alt="k8s architecture" width="600px" margin-right="14px">
-  <img src="https://bit.ly/3DlRzIi" alt="k8s components" width="600px">
-</div>
+  <img src="https://bit.ly/44XkgY7" alt="k8s architecture" width="800px" height ="450px" margin-left="14px">
+  
 
 Image Source: [Kubernetes Architecture](https://sensu.io/blog/how-kubernetes-works)
-Image Source: [Kubernetes Components](https://kubernetes.io/docs/concepts/overview/components/)
 
 ### Kubernetes architecture is divided into two main parts: the `Control Plane` and the `Data Plane`
 
@@ -189,6 +186,10 @@ The Data Plane is responsible for the following tasks:
 - **Networking**: Managing network rules and providing service discovery and load balancing among containers and services.
 
 - **Resource Monitoring**: Reporting resource usage and health status to the Control Plane for better decision-making.
+
+![Kube-component](https://user-images.githubusercontent.com/51878265/197317939-d7e8ecbb-912c-4223-b64a-1c46cbac255f.png)
+Image Source: [Kubernetes Components](https://kubernetes.io/docs/concepts/overview/components/)
+  
 
 ### 1. **Master Nodes:**
 
