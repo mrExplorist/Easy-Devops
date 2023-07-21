@@ -20,6 +20,13 @@ Welcome to the Kubernetes README! In this document, we will explore Kubernetes, 
     - [Advanced Deployments and Rollbacks](#advanced-deployments-and-rollbacks)
     - [Horizontal Pod Autoscaling](#horizontal-pod-autoscaling)
 - [Kubernetes Components and Architecture](#kubernetes-components-and-architecture)
+  - [Kubernetes architecture is divided into two main parts: the `Control Plane` and the `Data Plane`](#kubernetes-architecture-is-divided-into-two-main-parts-the-control-plane-and-the-data-plane)
+  - [Control Plane](#control-plane)
+    - [Responsibilities](#responsibilities)
+    - [Components](#components)
+  - [Data Plane](#data-plane)
+    - [Components](#components-1)
+    - [Responsibilities](#responsibilities-1)
     - [1. **Master Nodes:**](#1-master-nodes)
     - [2. **Worker Nodes:**](#2-worker-nodes)
     - [3. **Pods:**](#3-pods)
@@ -110,7 +117,78 @@ Kubernetes automatically adjusts the number of running replicas (Pods) based on 
 Image Source: [Kubernetes Architecture](https://sensu.io/blog/how-kubernetes-works)
 Image Source: [Kubernetes Components](https://kubernetes.io/docs/concepts/overview/components/)
 
-In Kubernetes, a cluster is composed of two main types of nodes: master nodes and worker nodes. Each type of node has specific roles and responsibilities within the cluster. Let's explore these nodes in detail:
+### Kubernetes architecture is divided into two main parts: the `Control Plane` and the `Data Plane`
+
+## Control Plane
+
+The Control Plane serves as the "brains" of the Kubernetes cluster. It acts as the central control and management hub, making high-level decisions about the desired state of the system and working to bring the actual state in line with it. Essentially, the Control Plane is responsible for managing the Kubernetes cluster and its components.
+The control plane is a logical entity made up of various components running on the master node. It manages the overall state and orchestration of the cluster. It is responsible for making decisions about the desired state of the system and taking actions to achieve it. The control plane continuously monitors the cluster's actual state and takes corrective actions to reconcile any differences between the actual and desired states. It also handles the scheduling and placement of workloads on the cluster.
+
+### Responsibilities
+
+The Control Plane is responsible for the following tasks:
+
+- **Reconciliation**: Continuously monitoring the cluster's desired state and taking action to ensure the actual state matches it.
+- **Horizontal Scaling**: Handling the scaling of application replicas based on the desired state and resource availability.
+- **Self-Healing**: Detecting and responding to node or pod failures by restarting or rescheduling affected components.
+- **Authorization and Authentication**: Enforcing security policies by authenticating and authorizing users and applications.
+- **Configuration and Secrets Management**: Managing configuration data and secrets for applications running on the cluster.
+- **Scheduling**: Assigning workloads to nodes based on resource availability and constraints.
+- **Networking and Service Discovery**: Managing network rules and providing service discovery and load balancing among containers and services.
+- **API Endpoint**: Exposing the Kubernetes API, which serves as the primary interface for interacting with the cluster.
+- **Cluster Management**: Managing the cluster's configuration data and the desired state of the resources.
+- **Resource Monitoring**: Reporting resource usage and health status to the Control Plane for better decision-making.
+- **Logging and Monitoring**: Collecting and aggregating logs and metrics from cluster components and applications.
+- **Cluster Upgrades**: Performing rolling upgrades of the cluster to ensure that all components are running the latest versions.
+- **Cluster Add-ons**: Managing add-ons such as the Kubernetes Dashboard, DNS, and container networking.
+- **Cloud Integration**: Integrating with the cloud provider's APIs to manage resources such as load balancers, storage volumes, and instances.
+- **Cluster Federation**: Managing multiple Kubernetes clusters as a single entity.
+- **Cluster Autoscaling**: Automatically scaling the cluster based on resource utilization and demand.
+- **Cluster Backup and Restore**: Backing up and restoring the cluster's configuration data and state.
+- **Cluster Security**: Enforcing security policies and best practices to protect the cluster from malicious attacks.
+- **Cluster Maintenance**: Performing routine maintenance tasks such as node upgrades and security patches.
+- **Cluster Troubleshooting**: Troubleshooting issues with the cluster and its components.
+- **Cluster Monitoring**: Monitoring the health and performance of the cluster and its components.
+- **Cluster Logging**: Collecting and aggregating logs from cluster components and applications.
+- **Cluster Auditing**: Auditing the cluster's configuration and state to ensure compliance with security policies and best practices.
+- **Cluster Networking**: Managing network rules and providing service discovery and load balancing among containers and services.
+- **Cluster Storage**: Managing storage volumes and providing persistent storage for applications running on the cluster.
+
+### Components
+
+The main components of the Kubernetes Control Plane are:
+
+1. **kube-apiserver**: This component exposes the Kubernetes API, which serves as the primary interface for interacting with the cluster. Clients, such as `kubectl` or the Kubernetes Dashboard, communicate with the kube-apiserver to create, update, and delete resources in the cluster.
+
+2. **etcd**: It is a distributed key-value store that acts as the cluster's database. The kube-apiserver uses etcd to store the cluster's configuration data and the desired state of the resources.
+
+3. **kube-scheduler**: The kube-scheduler is responsible for making decisions about where to place newly created pods based on factors like resource availability, node constraints, and quality of service requirements.
+
+4. **kube-controller-manager**: This component includes several individual controllers responsible for managing different aspects of the cluster, such as node controller, replication controller, endpoint controller, and service account controller.
+
+5. **cloud-controller-manager** (optional): In cloud-based Kubernetes clusters, this component integrates with the cloud provider's APIs to manage resources such as load balancers, storage volumes, and instances.
+
+## Data Plane
+
+The Data Plane, also known as the User Plane or the Worker Plane, is responsible for executing the actual workload and handling user traffic. It consists of the worker nodes in the Kubernetes cluster, where containers are scheduled and executed.
+
+### Components
+
+The main components of the Kubernetes Data Plane are:
+
+1. **kubelet**: The kubelet is an agent that runs on each worker node and is responsible for interacting with the Control Plane. It receives Pod specifications from the Control Plane and ensures the requested containers are running and healthy on the node.
+
+2. **kube-proxy**: The kube-proxy runs on each worker node and is responsible for network communication within the cluster. It maintains network rules and load balancing for services to ensure seamless communication between pods and external traffic.
+
+### Responsibilities
+
+The Data Plane is responsible for the following tasks:
+
+- **Container Management**: Running and managing containers based on Pod specifications provided by the Control Plane.
+
+- **Networking**: Managing network rules and providing service discovery and load balancing among containers and services.
+
+- **Resource Monitoring**: Reporting resource usage and health status to the Control Plane for better decision-making.
 
 ### 1. **Master Nodes:**
 
