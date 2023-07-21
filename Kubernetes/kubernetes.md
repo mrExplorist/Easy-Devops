@@ -311,5 +311,3 @@ In summary, Kubelet is an essential agent running on each node in the Kubernetes
 - [Cloud Native Computing Foundation (CNCF)](https://www.cncf.io/)
 
 ---
-
-Feel free to enhance and customize this README based on your specific audience and requirements. The goal is to provide a comprehensive introduction to Kubernetes while encouraging readers to explore the platform further through the provided links and resources.
