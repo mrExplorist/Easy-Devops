@@ -10,8 +10,8 @@ Welcome to the DevOps Basics repository! This README provides a comprehensive in
   - [Introduction](#introduction)
   - [Table of Contents](#table-of-contents)
   - [Introduction to DevOps](#introduction-to-devops)
-  - [Kubernetes: Container Orchestration Platform](#kubernetes-container-orchestration-platform)
   - [Docker: Containerization Platform](#docker-containerization-platform)
+  - [Kubernetes: Container Orchestration Platform](#kubernetes-container-orchestration-platform)
   - [Continuous Integration (CI)](#continuous-integration-ci)
   - [Continuous Deployment (CD)](#continuous-deployment-cd)
   - [Infrastructure as Code (IaC)](#infrastructure-as-code-iac)
@@ -24,17 +24,17 @@ Welcome to the DevOps Basics repository! This README provides a comprehensive in
 
 DevOps is a cultural and technical movement that aims to enhance collaboration between software development and IT operations teams. It emphasizes automation, continuous feedback, and continuous delivery to achieve faster and more reliable software development and deployment.
 
-## Kubernetes: Container Orchestration Platform
-
-Kubernetes is an open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications. It provides a powerful and flexible environment for running, coordinating, and scaling applications in a distributed system.
-
-Learn more about Kubernetes in the dedicated [Kubernetes README](/Kubernetes/kubernetes.md).
-
 ## Docker: Containerization Platform
 
 Docker is a leading containerization platform that allows developers to package applications and their dependencies into portable containers. It enables consistent and reliable software delivery across different environments.
 
 Learn more about Docker in the dedicated [Docker README](/Docker).
+
+## Kubernetes: Container Orchestration Platform
+
+Kubernetes is an open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications. It provides a powerful and flexible environment for running, coordinating, and scaling applications in a distributed system.
+
+Learn more about Kubernetes in the dedicated [Kubernetes README](/Kubernetes/kubernetes.md).
 
 ## Continuous Integration (CI)
 
