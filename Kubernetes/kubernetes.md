@@ -153,6 +153,10 @@ The Control Plane is responsible for the following tasks:
 
 ### Components
 
+![Kube-component](https://user-images.githubusercontent.com/51878265/197317939-d7e8ecbb-912c-4223-b64a-1c46cbac255f.png)
+Image Source: [Kubernetes Components](https://kubernetes.io/docs/concepts/overview/components/)
+
+
 The main components of the Kubernetes Control Plane are:
 
 1. **kube-apiserver**: This component exposes the Kubernetes API, which serves as the primary interface for interacting with the cluster. Clients, such as `kubectl` or the Kubernetes Dashboard, communicate with the kube-apiserver to create, update, and delete resources in the cluster.
@@ -187,8 +191,7 @@ The Data Plane is responsible for the following tasks:
 
 - **Resource Monitoring**: Reporting resource usage and health status to the Control Plane for better decision-making.
 
-![Kube-component](https://user-images.githubusercontent.com/51878265/197317939-d7e8ecbb-912c-4223-b64a-1c46cbac255f.png)
-Image Source: [Kubernetes Components](https://kubernetes.io/docs/concepts/overview/components/)
+
   
 
 ### 1. **Master Nodes:**
