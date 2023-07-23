@@ -283,6 +283,12 @@ Deployments defines the desired state of an application. It provides declarative
 
 9. **Pod Scheduling:** Deployments use the scheduler to assign Pods to nodes based on resource availability and constraints. They also support affinity/anti-affinity rules to control the placement of Pods on nodes.
 
+Recommended Resources :
+
+- [Video Tutorial on Deployment](https://youtu.be/lVKLkyuRWCY)
+- [Kubernetes Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+- [Kubernetes ReplicaSets](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)
+
 ### 5. **Services:**
 
 Services provide a stable network endpoint and load balancing for a set of Pods. They enable seamless communication between different components of an application.
