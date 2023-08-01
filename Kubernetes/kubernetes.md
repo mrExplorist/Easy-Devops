@@ -799,6 +799,8 @@ Ingress manages external access to services within the cluster. It acts as a gat
 ConfigMaps store configuration data, and Secrets securely store sensitive information, such as passwords or API keys. Both ConfigMaps and Secrets can be accessed by applications running in Pods.
 .
 
+[ Recommended Readings for understanding services ](https://kubernetes.io/docs/concepts/services-networking/service/)
+
 ## Some Detail Explanation of major components
 
 ### **Kubelet**
