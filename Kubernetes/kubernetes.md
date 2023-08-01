@@ -43,6 +43,7 @@ Welcome to the Kubernetes README! In this document, we will explore Kubernetes, 
       - [Creating a LoadBalancer Service](#creating-a-loadbalancer-service)
     - [5.4 ExternalName](#54-externalname)
       - [Creating an ExternalName Service](#creating-an-externalname-service)
+    - [Here is a simple comparison table to help you understand the service types at a quick glance.](#here-is-a-simple-comparison-table-to-help-you-understand-the-service-types-at-a-quick-glance)
     - [Creating a Kubernetes Service](#creating-a-kubernetes-service)
     - [Service Discovery](#service-discovery)
     - [Load Balancing](#load-balancing)
@@ -433,6 +434,12 @@ spec:
 ```
 
 In this example, the ExternalName service named "my-externalname-service" will resolve to the DNS name "my.external.service.com." When applications within the cluster access this service, they will be directed to the specified external DNS name.
+
+### Here is a simple comparison table to help you understand the service types at a quick glance.
+
+<img src = "https://bit.ly/47fN7bM" width="700" />
+
+Image Source: [Stack Overflow](https://stackoverflow.com/questions/41509439/whats-the-difference-between-clusterip-nodeport-and-loadbalancer-service-types)
 
 ### Creating a Kubernetes Service
 
