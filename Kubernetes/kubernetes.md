@@ -32,12 +32,37 @@ Welcome to the Kubernetes README! In this document, we will explore Kubernetes, 
     - [2. **Worker Nodes:**](#2-worker-nodes)
     - [3. **Pods:**](#3-pods)
     - [4. **Deployments:**](#4-deployments)
-    - [5. **Services:**](#5-services)
+  - [5. **Kubernetes Services**](#5-kubernetes-services)
+    - [What Problems Do Kubernetes Services Solve?](#what-problems-do-kubernetes-services-solve)
+    - [5. **Types of Kubernetes services**](#5-types-of-kubernetes-services)
+    - [5.1 ClusterIP](#51-clusterip)
+      - [Creating a ClusterIP Service](#creating-a-clusterip-service)
+    - [5.2 NodePort](#52-nodeport)
+      - [Creating a NodePort Service](#creating-a-nodeport-service)
+    - [5.3 LoadBalancer](#53-loadbalancer)
+      - [Creating a LoadBalancer Service](#creating-a-loadbalancer-service)
+    - [5.4 ExternalName](#54-externalname)
+      - [Creating an ExternalName Service](#creating-an-externalname-service)
+    - [Creating a Kubernetes Service](#creating-a-kubernetes-service)
+    - [Service Discovery](#service-discovery)
+    - [Load Balancing](#load-balancing)
+    - [Service Annotations](#service-annotations)
+    - [Managing Services with Labels and Selectors](#managing-services-with-labels-and-selectors)
+    - [Headless Services](#headless-services)
+    - [Sticky Sessions](#sticky-sessions)
+    - [Service Topology](#service-topology)
+    - [Endpoint Slices](#endpoint-slices)
+  - [12. Health Checks](#12-health-checks)
+    - [12.1 Liveness Probe](#121-liveness-probe)
+    - [12.2 Readiness Probe](#122-readiness-probe)
+  - [13. Service Accounts and Service Tokens](#13-service-accounts-and-service-tokens)
+  - [14. Service Policies](#14-service-policies)
+    - [14.1 NetworkPolicies](#141-networkpolicies)
+    - [14.2 Ingress Controllers](#142-ingress-controllers)
     - [6. **Ingress:**](#6-ingress)
     - [7. **ConfigMaps and Secrets:**](#7-configmaps-and-secrets)
   - [Some Detail Explanation of major components](#some-detail-explanation-of-major-components)
     - [**Kubelet**](#kubelet)
-    - [**Understanding difference between Containers, Pods, and Deployments**](#understanding-difference-between-containers-pods-and-deployments)
   - [Useful Links](#useful-links)
 
 ## What is Kubernetes?
@@ -289,9 +314,413 @@ Recommended Resources :
 - [Kubernetes Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 - [Kubernetes ReplicaSets](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)
 
-### 5. **Services:**
+## 5. **Kubernetes Services**
 
-Services provide a stable network endpoint and load balancing for a set of Pods. They enable seamless communication between different components of an application.
+<img src="./0_jMg1TqLkQLzIFJJ4.gif" alt="k8s services" width="600px" height ="400px" margin-left="14px">
+
+### What Problems Do <i>Kubernetes Services</i> Solve?
+
+In Kubernetes, Pods are non-permanent resources - they can appear and disappear as needed. This is because Kubernetes constantly checks to make sure the cluster is running the desired number of replicas (copies) of your app. And Pods are created or destroyed to match this desired state.
+
+Think of it this way: if you need more replicas of your app because of an increase in incoming traffic (more demand), Kubernetes will spin up some new Pods to handle it. If a Pod fails for some reason, no worries - Kubernetes will quickly create a new one to replace it. And if you want to update your app, Kubernetes can destroy old Pods and create new ones with the updated code. So the set of Pods running at one moment could be totally different from the set running a moment later.
+
+But here's the thing - if you want to access your app, how do you keep track of which Pod to connect to with all these changing IP addresses of Pods?
+
+That's where Services come in. They provide an unchanging location for a group of Pods. So even though the Pods themselves are dynamic, the Services make sure you always have a central location to access your app.
+
+Now that we understand one purpose of Kubernetes Services, let’s take a closer look at the different types of available Services.
+
+### 5. **Types of Kubernetes services**
+
+<img src = "./services.png" alt="k8s services" width="800px" height ="600px" margin-left="14px"/>
+
+`Kubernetes supports different types of services, each designed for specific use cases. The main service types are:`
+
+- ClusterIP. Exposes a service which is only accessible from within the cluster.
+- NodePort. Exposes a service via a static port on each node’s IP.
+- LoadBalancer. Exposes the service via the cloud provider’s load balancer.
+- ExternalName. Maps a service to a predefined externalName field by returning a value for the CNAME record.
+- Headless. Exposes a service without a cluster IP. This type is used when you need to directly access the pods through their IP addresses.
+
+### 5.1 ClusterIP
+
+ClusterIP is the default service type. It exposes the service on an internal IP address reachable only from within the cluster. Other pods within the same cluster can access the service using this IP.
+
+#### Creating a ClusterIP Service
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-clusterip-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+```
+
+In this example, the ClusterIP service named "my-clusterip-service" will route incoming TCP traffic on port 80 to the pods with the label "app=my-app" listening on port 8080.
+
+### 5.2 NodePort
+
+NodePort service type exposes the service on a static port on each node's IP address. This allows external access to the service, making it useful for scenarios where external users need to access the service directly.
+
+#### Creating a NodePort Service
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nodeport-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: NodePort
+```
+
+In this example, the NodePort service named "my-nodeport-service" will expose port 80 on all nodes' IP addresses, forwarding incoming TCP traffic to pods labeled with "app=my-app" on port 8080.
+
+### 5.3 LoadBalancer
+
+<img src="https://cdn.sanity.io/images/6icyfeiq/production/b0d01c6c9496b910ab29d2746f9ab109d10fb3cf-1320x588.png?w=952&h=424&q=75&fit=max&auto=format&dpr=2" alt="k8s loadbalancing" width="600px">
+
+LoadBalancer service type creates an external load balancer (provided by the cloud provider) and routes traffic to the service from outside the cluster. This type is suitable for scenarios where you want to expose the service to external users.
+
+#### Creating a LoadBalancer Service
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+```
+
+In this example, the LoadBalancer service named "my-loadbalancer-service" will create an external load balancer and route incoming TCP traffic on port 80 to the pods with the label "app=my-app" on port 8080.
+
+### 5.4 ExternalName
+
+ExternalName service type allows you to use an external service by mapping it to a DNS name. It does not provide any load balancing or proxy functionality and is typically used for services outside the cluster.
+
+#### Creating an ExternalName Service
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-externalname-service
+spec:
+  type: ExternalName
+  externalName: my.external.service.com
+```
+
+In this example, the ExternalName service named "my-externalname-service" will resolve to the DNS name "my.external.service.com." When applications within the cluster access this service, they will be directed to the specified external DNS name.
+
+### Creating a Kubernetes Service
+
+To create a Kubernetes service, you need to define a Service manifest in YAML format. The manifest specifies the service type, metadata (including the service name), selector to determine which pods the service should target, and the ports through which the service will communicate with the pods.
+
+Here's a basic example of a ClusterIP service manifest:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+```
+
+In this example, we create a ClusterIP service named "my-service" that targets pods with the label "app=my-app" and forwards incoming TCP traffic on port 80 to the pods on port 8080.
+
+Once you have defined the service manifest, you can apply it using the `kubectl apply` command:
+
+```
+kubectl apply -f my-service.yaml
+```
+
+The service will then be created in your Kubernetes cluster, and the pods with the matching labels will be accessible through the service IP.
+
+### Service Discovery
+
+Service discovery is a crucial aspect of Kubernetes services. It refers to the process of locating and accessing services within the cluster. Kubernetes uses DNS to enable service discovery.
+
+When you create a service, Kubernetes assigns it a DNS name based on the service name and the namespace in which it resides. For example, a
+
+service named "my-service" in the "default" namespace will be accessible using the DNS name "my-service.default.svc.cluster.local." This DNS name resolves to the ClusterIP of the service.
+
+Service discovery allows different parts of your application to communicate with each other by using these DNS names instead of hardcoded IP addresses. It abstracts the underlying infrastructure and allows pods to refer to each other dynamically.
+
+### Load Balancing
+
+Load balancing is a critical feature provided by Kubernetes services. When you have multiple replicas of a pod running to achieve high availability and scalability, the service ensures that incoming requests are distributed evenly among these pods.
+
+The default load balancing algorithm in Kubernetes is round-robin, where each incoming request is forwarded to the next pod in the list. This ensures an even distribution of traffic across all replicas of the service.
+
+With the LoadBalancer service type, an external load balancer is automatically provisioned by the cloud provider to distribute incoming traffic to the service. This allows you to expose your application to external users and manage incoming requests efficiently.
+
+### Service Annotations
+
+Kubernetes services support annotations, which are key-value pairs that provide additional information or configuration for the service. Annotations can be used to add extra metadata or control the behavior of the service.
+
+For example, you can use annotations to configure SSL certificates for a LoadBalancer service or customize the behavior of the service proxy.
+
+Here's an example of using annotations in a service manifest:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-west-2:123456789012:certificate/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+```
+
+In this example, we use annotations to configure an SSL certificate for the LoadBalancer service and specify the backend protocol and SSL ports.
+
+### Managing Services with Labels and Selectors
+
+Labels and selectors are fundamental concepts in Kubernetes used to group and identify objects. A label is a key-value pair attached to Kubernetes resources, such as pods, deployments, and services. A selector is used to match labels and group resources together.
+
+In the context of services, the selector is used to specify which pods the service should target. When creating a service, you define a selector based on specific labels. The service then automatically discovers pods with matching labels and directs traffic to them.
+
+For example, let's say you have several pods running your application, and they are labeled with "app=my-app" and "env=prod." To create a service targeting these pods, you can define the selector in the service manifest as follows:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: my-app
+    env: prod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+```
+
+In this example, the service named "my-service" will target pods with the labels "app=my-app" and "env=prod."
+
+Labels and selectors are powerful tools for managing and organizing your resources in Kubernetes, allowing you to apply specific configurations to groups of objects.
+
+### Headless Services
+
+A Headless Service is a special type of service in Kubernetes that does not allocate a ClusterIP. Instead, it provides DNS entries for the individual pods behind the service.
+
+When you create a Headless Service, Kubernetes creates DNS records for each pod associated with the service. The DNS names take the form of `<pod-name>.<service-name>.<namespace>.svc.cluster.local`, and they resolve directly to the pod's IP addresses.
+
+Headless Services are useful when you need to directly interact with individual pods, bypassing the load balancing and service proxy provided by the regular service types. This is common in stateful applications that require direct communication with specific pods, such as databases or messaging systems.
+
+To create a Headless Service, set the service type to "ClusterIP" and specify the `clusterIP` field as "None" in the service manifest:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-headless-service
+spec:
+  clusterIP: None
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+```
+
+In this example, the Headless Service named "my-headless-service" will not have a ClusterIP, and DNS records for individual pods will be created.
+
+### Sticky Sessions
+
+Sticky sessions, also known as session affinity, is a feature provided by some load balancers that allows the same client to be directed to the same backend pod across multiple requests. This can be useful when your application relies on maintaining state or session data on a specific pod.
+
+Kubernetes does not provide built-in support for sticky sessions in services. However, some cloud providers offer this feature through annotations or other load balancing options. If sticky sessions are a requirement for your application, check the documentation of your cloud provider to see if it is supported.
+
+### Service Topology
+
+Service Topology is a feature introduced in Kubernetes 1.18 that allows services to use node topology information for more intelligent load balancing. It ensures that the service routes traffic to pods that are co-located on the same node as the client making the request.
+
+This feature can improve the performance of applications that benefit from locality, such as distributed databases or caching systems.
+
+To enable Service Topology, set the `topologyKeys` field in the service manifest to a list of node labels that represent the topology domain.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  topologyKeys:
+    - kubernetes.io/hostname
+```
+
+In this example, the service named "my-service" will use the node hostname as the topology key.
+
+### Endpoint Slices
+
+Kubernetes 1.17 introduced Endpoint Slices, which is an enhancement to the traditional Endpoints resource. Endpoint Slices divide the service's endpoints into smaller, more manageable chunks.
+
+Traditional Endpoints could become large and unwieldy, especially for services with many replicas. Endpoint Slices address this by creating smaller slices, each representing a subset of the service's endpoints.
+
+The use of Endpoint Slices is transparent to users and applications that consume service endpoints. It's an internal implementation improvement that enhances the scalability and performance of the Kubernetes control plane.
+
+## 12. Health Checks
+
+Health checks are an essential aspect of managing Kubernetes services. They are used to ensure the availability and reliability of applications running within the cluster.
+
+Kubernetes provides two types of health checks for services:
+
+### 12.1 Liveness Probe
+
+The liveness probe is used to determine if the pod is healthy and should remain in service. If the liveness probe fails, the Kubernetes control plane
+
+will restart the pod.
+
+Common liveness probe options include HTTP requests, TCP sockets, or executing commands within the container to check its health status.
+
+### 12.2 Readiness Probe
+
+The readiness probe determines if the pod is ready to serve incoming requests. If the readiness probe fails, the pod is removed from the service's load balancer until it becomes ready again.
+
+The readiness probe is useful for avoiding sending requests to pods that are still starting up or experiencing issues.
+
+To configure liveness and readiness probes for your pods, include the `livenessProbe` and `readinessProbe` fields in the pod's container specification.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app-pod
+spec:
+  containers:
+    - name: my-app-container
+      image: my-app-image
+      ports:
+        - containerPort: 8080
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: 8080
+        initialDelaySeconds: 15
+        periodSeconds: 10
+      readinessProbe:
+        httpGet:
+          path: /health
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 10
+```
+
+In this example, the pod includes both liveness and readiness probes, which check the health status of the application on port 8080 by sending an HTTP GET request to the "/health" path.
+
+## 13. Service Accounts and Service Tokens
+
+Kubernetes services can authenticate to the API server using service accounts and service tokens. A service account is a dedicated identity for processes running in pods within a Kubernetes cluster.
+
+By default, pods are assigned a default service account that has limited permissions. You can create custom service accounts with specific RBAC (Role-Based Access Control) permissions and use them for different services in your cluster.
+
+Service accounts are automatically mounted as volume mounts inside pods, providing access to service tokens. Service tokens are used to authenticate the pod to the Kubernetes API server when interacting with the Kubernetes API.
+
+Service accounts and service tokens are a secure way to authenticate services running within the cluster without using sensitive credentials.
+
+## 14. Service Policies
+
+Service policies in Kubernetes help control network traffic and govern how services are accessed from different namespaces or external networks.
+
+Two main service policies are commonly used:
+
+### 14.1 NetworkPolicies
+
+NetworkPolicies are used to define rules that specify what traffic is allowed to reach a service or pod based on labels and namespaces. They can be used to isolate or secure applications within the cluster.
+
+NetworkPolicies act as a firewall, controlling the flow of traffic at the pod level. Without appropriate NetworkPolicies, all pods within a cluster can communicate with each other.
+
+Here's a simple example of a NetworkPolicy that allows incoming traffic only from pods labeled with "app=my-app" and within the same namespace:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: my-app-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: my-app
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: my-app
+```
+
+In this example, we create a NetworkPolicy named "my-app-network-policy" that allows incoming traffic from pods labeled with "app=my-app" within the same namespace.
+
+### 14.2 Ingress Controllers
+
+Ingress controllers are another type of service policy in Kubernetes that allow you to expose HTTP and HTTPS routes from outside the cluster to services within the cluster. They act as an entry point for external traffic and provide powerful routing and load balancing capabilities.
+
+Ingress controllers work with Ingress resources, which define the rules for routing traffic to services. Ingress resources can include path-based routing, hostname-based routing, SSL termination, and more.
+
+To use an Ingress controller, you need to install and configure it in your cluster. Commonly used Ingress controllers include Nginx Ingress Controller, Traefik, and HAProxy Ingress.
+
+Here's a simple example of an Ingress resource that routes incoming traffic to a service named "my-service" on the path "/app":
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /app
+            pathType: Prefix
+            backend:
+              service:
+                name: my-service
+                port:
+                  number: 80
+```
+
+In this example, we create an Ingress resource named "my-ingress" that routes incoming HTTP requests with the path "/app" to the service named "my-service" on port 80.
 
 ### 6. **Ingress:**
 
@@ -341,14 +770,6 @@ Here's a detailed explanation of Kubelet and its responsibilities:
 4. **Managing Pod Manifests:** Kubelet reads and interprets the pod manifests (definitions) provided by the control plane to determine which containers should be running on the node.
 
 In summary, Kubelet is an essential agent running on each node in the Kubernetes cluster. It ensures that the containers defined in pod specifications are up and running, handles their lifecycle, and communicates with the control plane to maintain the desired state of the cluster. Without Kubelet, the Kubernetes cluster would not be able to manage and orchestrate containers effectively.
-
-### **Understanding difference between Containers, Pods, and Deployments**
-
-| Concept     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Containers  | Containers are lightweight, standalone executable software packages that encapsulate application components and dependencies. They provide a consistent and isolated environment for running applications. The key benefits of using containers include portability, scalability, and resource efficiency. Containers utilize containerization technologies like Docker, allowing developers to package applications and all their dependencies into a single unit, making it easier to deploy and manage across different environments. Kubernetes leverages containers to manage and orchestrate application workloads efficiently.                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| Pods        | Pods are the fundamental building blocks in Kubernetes. A pod represents the smallest deployable unit and acts as a logical host for one or more closely related containers. Containers within a pod share the same network namespace, enabling them to communicate with each other using localhost. Pods are designed to be ephemeral and can be created, deleted, or replicated dynamically based on workload requirements. Kubernetes uses pods to distribute and balance the containers across nodes in the cluster. They provide a convenient way to group containers that work together as a single application, such as a web server and a database. Using pods ensures that these containers are scheduled and managed together on the same node.                                                                                                                                                                                                                                                                                                        |
-| Deployments | Deployments are a higher-level abstraction in Kubernetes that facilitate the management of replica sets and rolling updates. A deployment defines the desired state of the application and automatically handles the process of creating and scaling replicas (pods) to maintain that state. Deployments ensure high availability and fault tolerance by continuously monitoring and adjusting the number of replicas based on the specified configuration. One of the significant advantages of using deployments is the ability to perform rolling updates. Kubernetes can gradually update the application to a new version without causing downtime. It achieves this by creating new pods with the updated version while scaling down the old pods. If any issues arise during the update, the deployment can quickly roll back to the previous version, ensuring the application's stability and reliability. Deployments simplify the management of applications, making it easier to deploy, upgrade, and maintain the desired state of the application. |
 
 ## Useful Links
 
