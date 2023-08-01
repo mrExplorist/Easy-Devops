@@ -316,13 +316,15 @@ Recommended Resources :
 
 ## 5. **Kubernetes Services**
 
-<img src="./0_jMg1TqLkQLzIFJJ4.gif" alt="k8s services" width="600px" height ="400px" margin-left="14px">
-
 ### What Problems Do <i>Kubernetes Services</i> Solve?
 
 In Kubernetes, Pods are non-permanent resources - they can appear and disappear as needed. This is because Kubernetes constantly checks to make sure the cluster is running the desired number of replicas (copies) of your app. And Pods are created or destroyed to match this desired state.
 
-Think of it this way: if you need more replicas of your app because of an increase in incoming traffic (more demand), Kubernetes will spin up some new Pods to handle it. If a Pod fails for some reason, no worries - Kubernetes will quickly create a new one to replace it. And if you want to update your app, Kubernetes can destroy old Pods and create new ones with the updated code. So the set of Pods running at one moment could be totally different from the set running a moment later.
+Think of it this way: if you need more replicas of your app because of an increase in incoming traffic (more demand), Kubernetes will spin up some new Pods to handle it. If a Pod fails for some reason, no worries - Kubernetes will quickly create a new one to replace it. And if you want to update your app, Kubernetes can destroy old Pods and create new ones with the updated code.
+
+Each Pod gets its own IP address (Kubernetes expects network plugins to ensure this). For a given Deployment in your cluster, the set of Pods running in one moment in time could be different from the set of Pods running that application a moment later.
+
+This leads to a problem: if some set of Pods (call them "backends") provides functionality to other Pods (call them "frontends") inside your cluster, how do the frontends find out and keep track of which IP address to connect to, so that the frontend can use the backend part of the workload?
 
 But here's the thing - if you want to access your app, how do you keep track of which Pod to connect to with all these changing IP addresses of Pods?
 
@@ -331,8 +333,6 @@ That's where Services come in. They provide an unchanging location for a group o
 Now that we understand one purpose of Kubernetes Services, let’s take a closer look at the different types of available Services.
 
 ### 5. **Types of Kubernetes services**
-
-<img src = "./services.png" alt="k8s services" width="800px" height ="600px" margin-left="14px"/>
 
 `Kubernetes supports different types of services, each designed for specific use cases. The main service types are:`
 
@@ -343,6 +343,8 @@ Now that we understand one purpose of Kubernetes Services, let’s take a closer
 - Headless. Exposes a service without a cluster IP. This type is used when you need to directly access the pods through their IP addresses.
 
 ### 5.1 ClusterIP
+
+<img src= "https://bit.ly/3rX5PEY" alt="k8s clusterIP" width="400px">
 
 ClusterIP is the default service type. It exposes the service on an internal IP address reachable only from within the cluster. Other pods within the same cluster can access the service using this IP.
 
@@ -365,6 +367,8 @@ spec:
 In this example, the ClusterIP service named "my-clusterip-service" will route incoming TCP traffic on port 80 to the pods with the label "app=my-app" listening on port 8080.
 
 ### 5.2 NodePort
+
+<img src= "https://bit.ly/47dRN1R" alt="k8s clusterIP" width="400px">
 
 NodePort service type exposes the service on a static port on each node's IP address. This allows external access to the service, making it useful for scenarios where external users need to access the service directly.
 
