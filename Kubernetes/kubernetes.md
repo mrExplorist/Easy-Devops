@@ -870,4 +870,4 @@ In summary, Kubelet is an essential agent running on each node in the Kubernetes
 
 ## Important Questions
 
-- [You can use another repository as a self-paced learning guide or as a quick reference to refresh your Kubernetes knowledge. Each section contains precise questions along with comprehensive answers, making it easy for you to grasp essential Kubernetes concepts.](/Kubernetes/Importantk8sQuestions/README.md)
+- [You can use another readme as a self-paced learning guide or as a quick reference to refresh your Kubernetes knowledge. Each section contains precise questions along with comprehensive answers, making it easy for you to grasp essential Kubernetes concepts.](/Kubernetes/Importantk8sQuestions/README.md)
