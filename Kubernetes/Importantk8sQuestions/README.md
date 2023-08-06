@@ -20,6 +20,7 @@ Kubernetes has become a dominant force in the container orchestration space, mak
     - [3.10 Kubernetes Security](#310-kubernetes-security)
     - [3.11 Kubernetes Scaling and Autoscaling](#311-kubernetes-scaling-and-autoscaling)
   - [Kubernetes Terminology Comparison](#kubernetes-terminology-comparison)
+  - [Docker Swarm vs. Kubernetes](#docker-swarm-vs-kubernetes)
   - [4. Contributing](#4-contributing)
 
 ## 1. Introduction
@@ -464,6 +465,26 @@ In this example, the HPA named `my-hpa` targets the Deployment named `my-deploym
 | YAML Definition      | Defined using YAML, including metadata, containers, and volumes.                                         | Defined within the `containers` section of a Pod's YAML definition.                          | Defined using YAML, including desired replicas, selector, and template for the Pod specification.             |
 
 ---
+
+**Question: Docker Swarm vs. Kubernetes??**
+
+## Docker Swarm vs. Kubernetes
+
+| Aspect                   | Docker Swarm                                                                              | Kubernetes                                                                                                                   |
+| ------------------------ | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Definition               | Native clustering and orchestration tool for Docker containers, part of Docker ecosystem. | Open-source container orchestration platform, widely used for managing containerized applications.                           |
+| Container Support        | Supports only Docker containers.                                                          | Supports multiple container runtimes, including Docker, containerd, CRI-O, and more.                                         |
+| Scalability              | Suitable for small to medium-scale clusters.                                              | Suitable for large-scale production clusters.                                                                                |
+| High Availability        | Supports high availability with manager node quorum and worker node replication.          | Provides high availability through self-healing, auto-replication, and distributed architecture.                             |
+| Master Node              | Utilizes manager nodes for cluster control and coordination.                              | Uses control plane components, including etcd, kube-apiserver, kube-controller-manager, and kube-scheduler.                  |
+| Load Balancing           | Built-in routing mesh using IPVS or built-in DNS-based load balancing.                    | Utilizes kube-proxy and provides various load balancing options, including service type LoadBalancer, NodePort, and Ingress. |
+| Networking               | Swarm Overlay network or custom network drivers.                                          | Kubernetes supports multiple networking plugins, like Calico, Flannel, and Cilium.                                           |
+| Service Discovery        | Integrated with Docker's built-in service discovery or external tools.                    | Offers DNS-based service discovery natively for containerized applications.                                                  |
+| Rolling Updates          | Supports rolling updates with `docker service update` command.                            | Provides rolling updates through Deployments and ReplicaSets.                                                                |
+| Configuration Management | Uses Docker Compose for defining and managing services.                                   | Uses Kubernetes ConfigMaps and Secrets for managing configuration data.                                                      |
+| Extensibility            | Limited third-party integrations compared to Kubernetes.                                  | Rich ecosystem with numerous third-party tools, plugins, and integrations.                                                   |
+| Complexity               | Simpler to set up and manage, ideal for beginners.                                        | More complex, but offers greater flexibility and scalability for enterprise use cases.                                       |
+| Use Cases                | Suitable for small projects or environments heavily based on Docker.                      | Ideal for large-scale production environments with complex requirements.                                                     |
 
 ## 4. Contributing
 
