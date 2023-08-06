@@ -464,8 +464,6 @@ In this example, the HPA named `my-hpa` targets the Deployment named `my-deploym
 | Use Cases            | Running multiple co-located containers that require shared resources, like microservices.                | Running the main application component, its supporting services, and sidecar containers.     | Managing application lifecycle and maintaining desired replicas for high availability.                        |
 | YAML Definition      | Defined using YAML, including metadata, containers, and volumes.                                         | Defined within the `containers` section of a Pod's YAML definition.                          | Defined using YAML, including desired replicas, selector, and template for the Pod specification.             |
 
----
-
 **Question: Docker Swarm vs. Kubernetes??**
 
 ## Docker Swarm vs. Kubernetes
@@ -485,6 +483,8 @@ In this example, the HPA named `my-hpa` targets the Deployment named `my-deploym
 | Extensibility            | Limited third-party integrations compared to Kubernetes.                                  | Rich ecosystem with numerous third-party tools, plugins, and integrations.                                                   |
 | Complexity               | Simpler to set up and manage, ideal for beginners.                                        | More complex, but offers greater flexibility and scalability for enterprise use cases.                                       |
 | Use Cases                | Suitable for small projects or environments heavily based on Docker.                      | Ideal for large-scale production environments with complex requirements.                                                     |
+
+---
 
 ## 4. Contributing
 
