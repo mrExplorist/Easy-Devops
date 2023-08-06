@@ -21,6 +21,7 @@ Kubernetes has become a dominant force in the container orchestration space, mak
     - [3.11 Kubernetes Scaling and Autoscaling](#311-kubernetes-scaling-and-autoscaling)
   - [Kubernetes Terminology Comparison](#kubernetes-terminology-comparison)
   - [Docker Swarm vs. Kubernetes](#docker-swarm-vs-kubernetes)
+  - [**For Detailed Explanation of each topic**](#for-detailed-explanation-of-each-topic)
   - [4. Contributing](#4-contributing)
 
 ## 1. Introduction
@@ -486,10 +487,16 @@ In this example, the HPA named `my-hpa` targets the Deployment named `my-deploym
 
 ---
 
-## 4. Contributing
-
-Contributions to this repository are welcome! If you would like to add more questions, improve existing answers, or fix any errors, please fork this repository, make your changes, and submit a pull request.
-
 ---
 
 Note: You can use this repository as a self-paced learning guide or as a quick reference to refresh your Kubernetes knowledge. Each section contains precise questions along with comprehensive answers, making it easy for you to grasp essential Kubernetes concepts covering various aspects of Kubernetes, such as concepts, architecture, pods, services, deployments, networking, security, scaling, and more. The actual content can be expanded with additional questions, more detailed answers, and explanations based on specific needs and target audience.
+
+---
+
+## **For Detailed Explanation of each topic**
+
+- [Refer to kubernetes Readme of this repo](/Kubernetes/kubernetes.md)
+
+## 4. Contributing
+
+Contributions to this repository are welcome! If you would like to add more questions, improve existing answers, or fix any errors, please fork this repository, make your changes, and submit a pull request.
