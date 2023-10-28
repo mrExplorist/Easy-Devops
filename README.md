@@ -1,7 +1,3 @@
-
-
-
-
 <h1 align="center"> DevOps101 </h1>
 
 <p align="center"> Welcome to the DevOps Basics repository! This README provides a comprehensive introduction to various topics related to DevOps, including Kubernetes, Docker, Continuous Integration (CI), Continuous Deployment (CD), and more. Whether you are new to DevOps or looking to expand your knowledge, this repository aims to be a valuable resource for your learning journey.
@@ -9,7 +5,7 @@ It Contains all my learning related to DevOps tools and tech and will be constan
 
 ## Kubernetes
 
-<img align="right" src="https://user-images.githubusercontent.com/51878265/200594367-f416d081-af8f-4f48-8008-998d005b317f.png" height="60" alt="Kubernetes"> 
+<img align="right" src="https://user-images.githubusercontent.com/51878265/200594367-f416d081-af8f-4f48-8008-998d005b317f.png" height="60" alt="Kubernetes">
 
 - [Notes + Learning Resources](/Kubernetes/kubernetes.md)
 
@@ -17,26 +13,24 @@ It Contains all my learning related to DevOps tools and tech and will be constan
 
 ## Docker
 
-<img align="right" src="https://user-images.githubusercontent.com/51878265/200594916-47ba8a4c-fb94-4953-b179-dfb542df9499.png" height="60" alt="docker"> 
+<img align="right" src="https://user-images.githubusercontent.com/51878265/200594916-47ba8a4c-fb94-4953-b179-dfb542df9499.png" height="60" alt="docker">
 
-- [Notes + Learning Resources](/docker/docker.md)
+- [Notes + Learning Resources](/Docker/docker.md)
 
 <br>
 
-
-
-- ## [DevOps 101: Overview \& Comprehensive Introduction and References](#devops-101-overview--comprehensive-introduction-and-references)
-
-  - [Introduction to DevOps](#introduction-to-devops)
-  - [Docker: Containerization Platform](#docker-containerization-platform)
-  - [Kubernetes: Container Orchestration Platform](#kubernetes-container-orchestration-platform)
-  - [Continuous Integration (CI)](#continuous-integration-ci)
-  - [Continuous Deployment (CD)](#continuous-deployment-cd)
-  - [Infrastructure as Code (IaC)](#infrastructure-as-code-iac)
-  - [Containerization](#containerization)
-  - [Monitoring and Logging](#monitoring-and-logging)
-  - [Collaboration and Communication](#collaboration-and-communication)
-  - [References](#references)
+- [Kubernetes](#kubernetes)
+- [Docker](#docker)
+- [Introduction to DevOps](#introduction-to-devops)
+- [Docker: Containerization Platform](#docker-containerization-platform)
+- [Kubernetes: Container Orchestration Platform](#kubernetes-container-orchestration-platform)
+- [Continuous Integration (CI)](#continuous-integration-ci)
+- [Continuous Deployment (CD)](#continuous-deployment-cd)
+- [Infrastructure as Code (IaC)](#infrastructure-as-code-iac)
+- [Containerization](#containerization)
+- [Monitoring and Logging](#monitoring-and-logging)
+- [Collaboration and Communication](#collaboration-and-communication)
+- [References](#references)
 
 ## Introduction to DevOps
 
